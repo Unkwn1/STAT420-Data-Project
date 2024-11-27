@@ -1,12 +1,12 @@
 ---
-title: "Data Analysis Project - Group C63"
-author: "Daniel Shevchuk, Katie Giamaresem, Josh Kim, Vithuran Rathakrishnan"
+title: "Sloan Digital Sky Survey DR18 - Quasar Classification"
+author: "Daniel Shevchuk, Katie Giamarese, Josh Kim, Vithuran Rathakrishnan"
 date: 'November 22, 2024'
 output:
-  html_document: default
+  html_document: 
     theme: readable
     toc: yes
-  pdf_document:
+  pdf_document: default
 urlcolor: cyan
 ---
 
@@ -18,15 +18,23 @@ options(scipen = 1, digits = 4, width = 80, fig.align = "center")
 
 ## Description
 
-Source of processed dataset: https://www.kaggle.com/datasets/diraf0/sloan-digital-sky-survey-dr18/data
-
-This dataset contains 43 columns with 42 of those columns containing various quantitative features of 100,000 distinct astronomical objects. We will be focusing specifically on [LIST ~10 COLUMNS] (u, g, r, i, z, redshift, petroRad_u, petroRad_g, petroRad_r, petroRad_i, petroRad_z). where u, g, r, i, z correspond to the raw brightness of each object in the five photometric bands; namely ultraviolet band, green band, red band, infrared band, and near infrared band respectively. 
+This dataset contains 43 columns with 42 of those columns containing various quantitative features of 100,000 distinct astronomical objects. We will be focusing specifically on the variables: u, g, r, i, z, redshift, petroRad_u, petroRad_g, petroRad_r, petroRad_i, and petroRad_z and using them to predict whether a given object is quasar or not. The variables u, g, r, i, z correspond to the raw brightness of each object in the five photometric bands; namely ultraviolet band, green band, red band, infrared band, and near infrared band respectively. 
 
 We must note that the brightness of a celestial object is measured in apparent magnitude, formally called magnitudes per square arcsecond (MPSAS), where arcseconds are 1/3600 of a degree (the entire sky is considered to be 360 degrees) and the measurement dictates that the brighter the object, the lower the number assigned as a magnitude.
 
 The petroRad variables correspond to the petrosian radius, which measures how the brightness of an object varies with distance from its center. The value is defined as the distance from the object's center where the ratio of the local surface brightness to the average surface brightness reaches a certain predefined value (set to a magnitude of 0.2 in the case of this dataset). In essence, the petrosian radius "normalizes" the size of an object based on its average brightness, since objects further away appear dimmer and smaller than closer objects.
 
 We will be predicting the class of an object given these brightness measurements, specifically whether an object is a quasar or not using a logistic regression model. The true values for each object are given in the "class" column within the dataset.
+
+## Background
+
+Source of processed dataset: https://www.kaggle.com/datasets/diraf0/sloan-digital-sky-survey-dr18/data
+
+The Sloan Digitial Sky Survey is multi-spectral imaging and spectroscopic redshift survey using a dedicated 2.5 meter optical telescope at Apache Point Observatory in New Mexico. The project began in 2000 and has run four separate generations of observations with a fifth currently underway. Data is released periodically throughout each phase with the most recent data release 18, a subset of which we are using as our dataset, being made public in January 2023.
+
+## Interest
+
+The primary reason we selected this dataset is for interest in the scientific research being conducted using this data. The SDSS website lists the data being used in subjects covering topics such as distant quasars at the limits of the observable universe, the distribution of galaxies within the observable universe, and creating three dimensional maps of stars in our galaxy.
 
 ## Data Example
 
