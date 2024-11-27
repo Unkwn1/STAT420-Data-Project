@@ -1,6 +1,6 @@
 ---
 title: "Data Analysis Project - Group C63"
-author: "Daniel Shevchuk, Katie Giamaresem, Josh Kim, Vithuran Rathakrishnan"
+author: "Daniel Shevchuk, Katie Giamarese, Josh Kim, Vithuran Rathakrishnan"
 date: 'November 22, 2024'
 output:
   html_document: default
