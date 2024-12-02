@@ -18,13 +18,12 @@ options(scipen = 1, digits = 4, width = 80, fig.align = "center")
 
 ## Description
 
-This dataset contains 43 columns with 42 of those columns containing various quantitative features of 100,000 distinct astronomical objects. We will be focusing specifically on the variables: u, g, r, i, z, redshift, petroRad_u, petroRad_g, petroRad_r, petroRad_i, and petroRad_z and using them to predict whether a given object is quasar or not. The variables u, g, r, i, z correspond to the raw brightness of each object in the five photometric bands; namely ultraviolet band, green band, red band, infrared band, and near infrared band respectively. 
+This dataset contains 43 columns with 42 of those columns containing various quantitative features of 100,000 distinct astronomical objects. We will be focusing specifically on the variables: u, g, r, i, z, petroRad_u, petroRad_g, petroRad_r, petroRad_i, petroRad_z and the categorical class with values "STAR", "GALAXY", "QUASAR". We will be using these variables to predict the redshift of any particular object. The redshift of an object is how "shifted" the photon is to longer wavelengths and is measured as a fractional value between 0 and 1 of how much the wavelength has been increased. The variables u, g, r, i, z correspond to the raw brightness of each object in the five photometric bands; namely ultraviolet band, green band, red band, infrared band, and near infrared band respectively. 
 
 We must note that the brightness of a celestial object is measured in apparent magnitude, formally called magnitudes per square arcsecond (MPSAS), where arcseconds are 1/3600 of a degree (the entire sky is considered to be 360 degrees) and the measurement dictates that the brighter the object, the lower the number assigned as a magnitude.
 
 The petroRad variables correspond to the petrosian radius, which measures how the brightness of an object varies with distance from its center. The value is defined as the distance from the object's center where the ratio of the local surface brightness to the average surface brightness reaches a certain predefined value (set to a magnitude of 0.2 in the case of this dataset). In essence, the petrosian radius "normalizes" the size of an object based on its average brightness, since objects further away appear dimmer and smaller than closer objects.
 
-We will be predicting the class of an object given these brightness measurements, specifically whether an object is a quasar or not using a logistic regression model. The true values for each object are given in the "class" column within the dataset.
 
 ## Background
 
