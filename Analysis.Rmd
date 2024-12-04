@@ -82,7 +82,12 @@ best_model_index <- which.min(aic_values)
 cat("\nThe best model is: ", model_names[best_model_index])
 
 
-## Results
+### Results
+
+AIC for Initial Model:  81186.36 
+AIC for Interaction Model:  75952.31 
+AIC for Final Model (After Stepwise Selection):  75949.73 
+The best model is:  Final Model (Stepwise)
 
 ## Discussion
 
