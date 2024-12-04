@@ -1,6 +1,6 @@
 ---
 title: "Data Analysis Project - Group C63"
-author: "Daniel Shevchuk, Katie Giamaresem, Josh Kim, Vithuran Rathakrishnan"
+author: "Daniel Shevchuk, Katie Giamarese, Josh Kim, Vithuran Rathakrishnan"
 date: 'November 22, 2024'
 output:
   html_document: default
@@ -16,22 +16,33 @@ urlcolor: cyan
 options(scipen = 1, digits = 4, width = 80, fig.align = "center")
 ```
 
-## R Markdown
+## Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+The dataset we are going to be analyzing in this project is from the Sloan Digitial Sky Survey (SDSS). The SDSS is long term multi-spectral imaging and spectroscopic redshift survey using a dedicated 2.5 meter optical telescope at Apache Point Observatory in New Mexico. The project began in 2000 and has run four separate generations of observations with a fifth currently underway. Data is released periodically throughout each phase with the most recent data release 18, of which a subset of 100,000 observations we are using as our dataset, being made public in January 2023.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+The primary reason we selected this dataset is for interest in the scientific research being conducted using this data. The SDSS website lists the data being used in subjects covering topics such as distant quasars at the limits of the observable universe, the distribution of galaxies within the observable universe, and creating three dimensional maps of stars in our galaxy.
 
-```{r cars}
-summary(cars)
+For the purposes of this report, we will be focusing specifically on the variables: u, g, r, i, z, petroRad_u, petroRad_g, petroRad_r, petroRad_i, petroRad_z and the categorical class with values "STAR", "GALAXY", and "QUASAR". We will be using these variables to predict the redshift of any particular object. 
+
+### Variable descriptions
+
+The redshift of an object is how "shifted" the photon is to longer wavelengths and is measured as a fractional value between 0 and 1 of how much the wavelength has been increased. The variables u, g, r, i, z correspond to the raw brightness of each object in the five photometric bands; namely ultraviolet band, green band, red band, infrared band, and near infrared band respectively. 
+
+We must note that units for the u, g, r, i and z variables are the apparent brightness of a celestial object and are measured in apparent magnitude, formally called magnitudes per square arcsecond (MPSAS). An arcsecond is 1/3600 of a degree (the entire sky is considered to be 360 degrees) and the way the measurement is calculated dictates that the brighter the object, the lower the number assigned as a magnitude.
+
+The petroRad variables correspond to the petrosian radius, which measures how the brightness of an object varies with distance from its center. The value is defined as the distance from the object's center where the ratio of the local surface brightness to the average surface brightness reaches a certain predefined value (set to a magnitude of 0.2 in the case of this dataset). In essence, the petrosian radius "normalizes" the size of an object based on its average brightness, since objects further away appear dimmer and smaller than closer objects.
+
+## Methods
+
+```{r, warning = FALSE}
+data = read.csv("SDSS_DR18.csv")
+df = data[["u", "g", "r", "i", "z", "petroRad_u", "petroRad_g", "petroRad_r", "petroRad_i", "petroRad_z", "redshift"]]
+head(df)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+## Results
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+## Discussion
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Appendix
