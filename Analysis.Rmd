@@ -40,6 +40,47 @@ df = data[["u", "g", "r", "i", "z", "petroRad_u", "petroRad_g", "petroRad_r", "p
 head(df)
 ```
 
+# I literally have no idea if this is what we were supposed to do these instructions are so unclear
+# I tried absolutely feel free to change anything and everything
+
+
+# ----------------------------
+# Model 1: Initial Linear Model
+# ----------------------------
+initial_model <- lm(redshift ~ ., data = df)
+cat("Initial Model Summary:\n")
+summary(initial_model)
+
+# ----------------------------
+# Model 2: Adding Interaction Terms
+# ----------------------------
+interaction_model <- lm(
+  redshift ~ (u + g + r + i + z) * (petroRad_u + petroRad_g + petroRad_r + petroRad_i + petroRad_z),
+  data = df
+)
+cat("\nInteraction Model Summary:\n")
+summary(interaction_model)
+
+# ----------------------------
+# Model 3: Model Selection
+# ----------------------------
+library(MASS)
+final_model <- stepAIC(interaction_model, direction = "both")
+cat("\nFinal Model (After Stepwise Selection) Summary:\n")
+summary(final_model)
+
+
+# Compare AIC of each model
+cat("\nAIC for Initial Model: ", AIC(initial_model), "\n")
+cat("AIC for Interaction Model: ", AIC(interaction_model), "\n")
+cat("AIC for Final Model (After Stepwise Selection): ", AIC(final_model), "\n")
+
+# Determine the best model based on the lowest AIC
+aic_values <- c(AIC(initial_model), AIC(interaction_model), AIC(final_model))
+model_names <- c("Initial Model", "Interaction Model", "Final Model (Stepwise)")
+best_model_index <- which.min(aic_values)
+cat("\nThe best model is: ", model_names[best_model_index])
+
 
 ## Results
 
