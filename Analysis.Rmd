@@ -87,13 +87,14 @@ cat("\nThe best model is: ", model_names[best_model_index])
 AIC for Initial Model:  81186.36 
 AIC for Interaction Model:  75952.31 
 AIC for Final Model (After Stepwise Selection):  75949.73 
-The best model is:  Final Model (Stepwise)
+The best model is: Final Model (Stepwise)
 
-AIC measures model quality, balancing fit and model complexity.
-Lower AIC values indicate a better model, because it achieves a better fit with fewer predictors or unnecessary complexity.
-The Final Model has the lowest AIC of the three models, indicating that it fits the data well
-It excludes predictors or interactions that do not contribute significantly to the model.
+AIC measures model quality, balancing fit and model complexity. Lower AIC values indicate a better model because it achieves a better fit with fewer predictors or unnecessary complexity. The Final Model has the lowest AIC of the three models, indicating that it fits the data well. It excludes predictors or interactions that do not contribute significantly to the model.
 
 ## Discussion
+
+The final model (selected using stepwise regression) is a streamlined version of the interaction model. It captures the relationships between the photometric properties (u, g, r, i, z) and petrosian radii (petroRad_u, petroRad_g, petroRad_r, petroRad_i, petroRad_z) 
+of celestial objects and their redshift. The redshift of a celestial object is a critical measurement in astrophysics, reflecting the degree to which the object's light has shifted toward longer wavelengths. Our model provides a way to predict redshift using data and available features from the Sloan Digital Sky Survey (SDSS). The final model provides an efficient method for predicting redshift based on photometric and structural data. This can be valuable in astrophysical studies because it allows researchers to quickly estimate redshift without relying on time-intensive spectroscopic observations.
+
 
 ## Appendix
