@@ -89,6 +89,11 @@ AIC for Interaction Model:  75952.31
 AIC for Final Model (After Stepwise Selection):  75949.73 
 The best model is:  Final Model (Stepwise)
 
+AIC measures model quality, balancing fit and model complexity.
+Lower AIC values indicate a better model, because it achieves a better fit with fewer predictors or unnecessary complexity.
+The Final Model has the lowest AIC of the three models, indicating that it fits the data well
+It excludes predictors or interactions that do not contribute significantly to the model.
+
 ## Discussion
 
 ## Appendix
