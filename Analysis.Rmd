@@ -3,10 +3,10 @@ title: "Data Analysis Project - Group C63"
 author: "Daniel Shevchuk, Katie Giamarese, Josh Kim, Vithuran Rathakrishnan"
 date: 'November 22, 2024'
 output:
-  html_document: default
+  html_document: 
     theme: readable
     toc: yes
-  pdf_document:
+  pdf_document: default
 urlcolor: cyan
 ---
 
@@ -30,59 +30,88 @@ The redshift of an object is how "shifted" the photon is to longer wavelengths a
 
 We must note that units for the u, g, r, i and z variables are the apparent brightness of a celestial object and are measured in apparent magnitude, formally called magnitudes per square arcsecond (MPSAS). An arcsecond is 1/3600 of a degree (the entire sky is considered to be 360 degrees) and the way the measurement is calculated dictates that the brighter the object, the lower the number assigned as a magnitude.
 
-The petroRad variables correspond to the petrosian radius, which measures how the brightness of an object varies with distance from its center. The value is defined as the distance from the object's center where the ratio of the local surface brightness to the average surface brightness reaches a certain predefined value (set to a magnitude of 0.2 in the case of this dataset). In essence, the petrosian radius "normalizes" the size of an object based on its average brightness, since objects further away appear dimmer and smaller than closer objects.
+The petroRad variables correspond to the petrosian radius, which measures how the brightness of an object varies with distance from its center. The value is defined as the distance from the object's center where the ratio of the local surface brightness to the average surface brightness reaches a certain predefined value (set to a magnitude of 0.2 in the case of this dataset). In essence, using the petrosian radius in this way "normalizes" the size of an object based on its average brightness, since objects further away appear dimmer and smaller than closer objects.
 
 ## Methods
 
+We first read in our data, and select the appropriate columns which we are going to be using for our models:
+
 ```{r, warning = FALSE}
 data = read.csv("SDSS_DR18.csv")
-df = data[["u", "g", "r", "i", "z", "petroRad_u", "petroRad_g", "petroRad_r", "petroRad_i", "petroRad_z", "redshift"]]
+df = data[c("u", "g", "r", "i", "z", "petroRad_u", "petroRad_g", "petroRad_r", "petroRad_i", "petroRad_z", "class", "redshift")]
 head(df)
 ```
-
-# I literally have no idea if this is what we were supposed to do these instructions are so unclear
-# I tried absolutely feel free to change anything and everything
-
-
-# ----------------------------
-# Model 1: Initial Linear Model
-# ----------------------------
+Now we fit our first simple linear model, which just uses all the variables as predictors with no further modification:
+```{r}
 initial_model <- lm(redshift ~ ., data = df)
 cat("Initial Model Summary:\n")
 summary(initial_model)
+```
 
-# ----------------------------
-# Model 2: Adding Interaction Terms
-# ----------------------------
-interaction_model <- lm(
-  redshift ~ (u + g + r + i + z) * (petroRad_u + petroRad_g + petroRad_r + petroRad_i + petroRad_z),
-  data = df
-)
+No that we have a baseline model we try a much larger model, specifically using all of the base predictors as well as their second order interactions terms with each other:
+
+```{r}
+interaction_model = lm(redshift ~ .^2, data = df)
+
 cat("\nInteraction Model Summary:\n")
 summary(interaction_model)
+```
+We find that the $R^2$ value has improved, however, a massive downside of this improvement in the model is the massive increase in number of predictors for only a marginal improvement in explanatory power of about 4%. Where the previous simple model had ten numeric predictors with two factor levels of a categorical variable, this interaction model has 78 including the intercept term. 
 
-# ----------------------------
-# Model 3: Model Selection
-# ----------------------------
+This model is clearly too complicated to be of practical use, but there are several terms which have very large p-values indicating that they do not add much to the predictive power of the interaction model. We can instead use the method of forwards/backwards search by use of AIC and BIC criteria in order to reduce the model complexity hopefully without sacrificing too much accuracy.
+
+
+# TO DO: perform fwd/back selection using null model as start instead of full interaction model
+# FYI: This code block takes 10 minutes to run
+# Also need to note stepwise is not very good for selecting a model, LASSO or Elastic Net would be a better algorithm for removing perdictors
+
+```{r}
 library(MASS)
-final_model <- stepAIC(interaction_model, direction = "both")
+
+# Selection using AIC criteria
+final_model_aic <- step(interaction_model, direction = "both", trace = FALSE)
 cat("\nFinal Model (After Stepwise Selection) Summary:\n")
-summary(final_model)
+summary(final_model_aic)
 
+# Selection using BIC criteria
+logn = log(length(resid(interaction_model)))
+model_bic = step(interaction_model, direction = "both", k = logn, trace = FALSE)
+summary(model_bic)
 
+null_model = lm(redshift ~ 1, data = df)
+null_model_aic = step(null_model, direction = "both", scope = list(upper = full_model), trace = FALSE)
+summary(null_model_aic)
+```
+
+```{r}
 # Compare AIC of each model
 cat("\nAIC for Initial Model: ", AIC(initial_model), "\n")
-cat("AIC for Interaction Model: ", AIC(interaction_model), "\n")
-cat("AIC for Final Model (After Stepwise Selection): ", AIC(final_model), "\n")
+cat("BIC for Initial Model: ", BIC(initial_model), "\n")
+cat("R Squared for Initial Model: ", summary(initial_model)$r.squared, "\n")
 
+cat("\nAIC for Interaction Model: ", AIC(interaction_model), "\n")
+cat("BIC for interaction model: ", BIC(interaction_model), "\n")
+cat("R Squared for Interaction Model: ", summary(interaction_model)$r.squared, "\n")
+
+cat("\nAIC for AIC selected model: ", AIC(final_model_aic), "\n")
+cat("BIC for AIC selected model: ", BIC(final_model_aic), "\n")
+cat("R Squared for AIC Stepwise Model: ", summary(final_model_aic)$r.squared, "\n")
+
+cat("\nAIC for BIC selected model: ", AIC(model_bic), "\n")
+cat("BIC for BIC selected model: ", BIC(model_bic), "\n")
+cat("R Squared for AIC Stepwise Model: ", summary(model_bic)$r.squared)
+```
+
+```{r}
 # Determine the best model based on the lowest AIC
-aic_values <- c(AIC(initial_model), AIC(interaction_model), AIC(final_model))
+aic_values <- c(AIC(initial_model), AIC(interaction_model), AIC(final_model_aic))
 model_names <- c("Initial Model", "Interaction Model", "Final Model (Stepwise)")
 best_model_index <- which.min(aic_values)
 cat("\nThe best model is: ", model_names[best_model_index])
+```
 
 
-### Results
+## Results
 
 AIC for Initial Model:  81186.36 
 AIC for Interaction Model:  75952.31 
