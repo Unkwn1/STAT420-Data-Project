@@ -122,7 +122,7 @@ AIC measures model quality, balancing fit and model complexity. Lower AIC values
 
 ## Discussion
 
-The final model (selected using stepwise regression) is a streamlined version of the interaction model. It captures the relationships between the photometric properties (u, g, r, i, z) and petrosian radii (petroRad_u, petroRad_g, petroRad_r, petroRad_i, petroRad_z) 
+The final model captures the relationships between the photometric properties (u, g, r, i, z) and petrosian radii (petroRad_u, petroRad_g, petroRad_r, petroRad_i, petroRad_z) 
 of celestial objects and their redshift. The redshift of a celestial object is a critical measurement in astrophysics, reflecting the degree to which the object's light has shifted toward longer wavelengths. Our model provides a way to predict redshift using data and available features from the Sloan Digital Sky Survey (SDSS). The final model provides an efficient method for predicting redshift based on photometric and structural data. This can be valuable in astrophysical studies because it allows researchers to quickly estimate redshift without relying on time-intensive spectroscopic observations.
 
 
