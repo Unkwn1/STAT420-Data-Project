@@ -138,38 +138,37 @@ cat("\nThe best model is: ", model_names[best_model_index])
 3    Forward Selection     -15632      -15014
 4 Backward Elimination     -15577      -15168
  
-Initial Linear Model
-An initial simple linear model was fitted using all available predictors without interactions. This model gave us: 
-R-squared: 0.691, indicating that 69.1% of the variance in redshift could be explained by the predictors.
-AIC: -438.3, suggesting the model had a modest level of fit relative to its complexity.
-BIC: -305.1, which penalized the model for its number of predictors but was still within a reasonable range.
+**Initial Linear Model**
+An initial simple linear model was fitted using all available predictors without interactions. This model gave us:
 
-Interaction Model
+* R-squared: 0.691, indicating that 69.1% of the variance in redshift could be explained by the predictors.
+* AIC: -438.3, suggesting the model had a modest level of fit relative to its complexity.
+* BIC: -305.1, which penalized the model for its number of predictors but was still within a reasonable range.
+
+**Interaction Model**
 A secondary interaction model was created by including second-order interaction terms. This increased the number of predictors from 11 to 78. 
-R-squared: 0.735, which is slightly better than the initial model.
-AIC: -15,619, a much better improvement in fit over the initial model.
-BIC: -14,868, similar to the AIC, a much greater impact over the initial model.
 
+* R-squared: 0.735, which is slightly better than the initial model.
+* AIC: -15,619, a much better improvement in fit over the initial model.
+* BIC: -14,868, similar to the AIC, a much greater impact over the initial model.
 
-Stepwise Model Selection
+**Stepwise Model Selection**
 To reduce complexity and retain predictive accuracy a stepwise selection using both AIC and BIC criteria was utilized:
 
-AIC based stepwise model:
-R-squared: 0.735, matching the interaction model's performance.
-AIC: -15,632, very slightly better than the interaction model.
-BIC: -15,014, indicating a bit more of a favorable balance between fit and complexity than the interaction model.
+**AIC based stepwise model:**
 
-The final model had 41 predictors which is a significant reduction compared to the interaction model.
-BIC based stepwise model:R-squared: 0.717, slightly lower than the AIC-selected model.
-AIC: -15,577, indicating a strong and similar fit to the AIC model.
-BIC: -15,168, a slightly better value compared to the AIC and Interaction models.
+* R-squared: 0.735, matching the interaction model's performance.
+* AIC: -15,632, very slightly better than the interaction model.
+* BIC: -15,014, indicating a bit more of a favorable balance between fit and complexity than the interaction model.
+* The final model had 41 predictors which is a significant reduction compared to the interaction model.
 
-This model also only had 20 predictors, a significant reduction compared to the AIC model.
-Overall, this is better than the initial and interaction models but not quite as competitive as the AIC-based model due to its lower R-squared value and AIC.
+**BIC based stepwise model:**
 
-
-
-AIC measures model quality, balancing fit and model complexity. Lower AIC values indicate a better model because it achieves a better fit with fewer predictors or unnecessary complexity.
+* R-squared: 0.717, slightly lower than the AIC-selected model.
+* AIC: -15,577, indicating a strong and similar fit to the AIC model.
+* BIC: -15,168, a slightly better value compared to the AIC and Interaction models.
+* This model also only had 20 predictors, a significant reduction compared to the AIC model.
+* Overall, this is better than the initial and interaction models but not quite as competitive as the AIC-based model due to its lower R-squared value and AIC.
 
 
 ## Discussion
