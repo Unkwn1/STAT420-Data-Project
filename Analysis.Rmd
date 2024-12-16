@@ -48,7 +48,7 @@ cat("Initial Model Summary:\n")
 summary(initial_model)
 ```
 
-No that we have a baseline model we try a much larger model, specifically using all of the base predictors as well as their second order interactions terms with each other:
+Now that we have a baseline model we try a much larger model, specifically using all of the base predictors as well as their second order interactions terms with each other:
 
 ```{r}
 interaction_model = lm(redshift ~ .^2, data = df)
@@ -63,30 +63,10 @@ This model is clearly too complicated to be of practical use, but there are seve
 
 # TO DO: perform fwd/back selection using null model as start instead of full interaction model
 # FYI: This code block takes 10 minutes to run
-# Also need to note stepwise is not very good for selecting a model, LASSO or Elastic Net would be a better algorithm for removing perdictors
+# Also need to note stepwise is not very good for selecting a model, LASSO or Elastic Net would be a better algorithm for removing predictors
 
 null_model <- lm(redshift ~ 1, data = df)
 full_model <- lm(redshift ~ ., data = df)
-
-# Perform forward selection
-cat("Performing Forward Selection...\n")
-forward_model <- step(null_model, 
-                      scope = list(lower = null_model, upper = full_model), 
-                      direction = "forward", 
-                      trace = 1)  # Set trace = 0 to suppress output
-
-cat("\nFinal Forward Selection Model:\n")
-summary(forward_model)
-
-# Perform backward elimination
-cat("\nPerforming Backward Elimination...\n")
-backward_model <- step(full_model, 
-                       direction = "backward", 
-                       trace = 1)  # Set trace = 0 to suppress output
-
-cat("\nFinal Backward Elimination Model:\n")
-summary(backward_model)
-
 
 ```{r}
 library(MASS)
@@ -107,43 +87,6 @@ summary(null_model_aic)
 
 
 cat("\nAIC and BIC Comparison:\n")
-
-# Initial model (all predictors)
-initial_model <- lm(redshift ~ ., data = df)
-cat("\nInitial Model AIC:", AIC(initial_model), "\n")
-cat("Initial Model BIC:", BIC(initial_model), "\n")
-cat("R Squared for Initial Model: ", summary(initial_model)$r.squared, "\n")
-
-# Interaction model (with interaction terms)
-interaction_model <- lm(redshift ~ .^2, data = df)
-cat("\nInteraction Model AIC:", AIC(interaction_model), "\n")
-cat("Interaction Model BIC:", BIC(interaction_model), "\n")
-cat("R Squared for Interaction Model: ", summary(interaction_model)$r.squared, "\n")
-
-# Forward selection model
-cat("\nForward Selection Model AIC:", AIC(forward_model), "\n")
-cat("Forward Selection Model BIC:", BIC(forward_model), "\n")
-
-# Backward elimination model
-cat("\nBackward Elimination Model AIC:", AIC(backward_model), "\n")
-cat("Backward Elimination Model BIC:", BIC(backward_model), "\n")
-
-# Compare AIC and BIC to pick the best model based on lowest values
-model_comparison <- data.frame(
-  Model = c("Initial", "Interaction", "Forward Selection", "Backward Elimination"),
-  AIC = c(AIC(initial_model), AIC(interaction_model), AIC(forward_model), AIC(backward_model)),
-  BIC = c(BIC(initial_model), BIC(interaction_model), BIC(forward_model), BIC(backward_model))
-)
-
-
-print(model_comparison)
-
-
-
-
-
-
-
 
 ```{r}
 # Compare AIC of each model
