@@ -65,6 +65,29 @@ This model is clearly too complicated to be of practical use, but there are seve
 # FYI: This code block takes 10 minutes to run
 # Also need to note stepwise is not very good for selecting a model, LASSO or Elastic Net would be a better algorithm for removing perdictors
 
+null_model <- lm(redshift ~ 1, data = df)
+full_model <- lm(redshift ~ ., data = df)
+
+# Perform forward selection
+cat("Performing Forward Selection...\n")
+forward_model <- step(null_model, 
+                      scope = list(lower = null_model, upper = full_model), 
+                      direction = "forward", 
+                      trace = 1)  # Set trace = 0 to suppress output
+
+cat("\nFinal Forward Selection Model:\n")
+summary(forward_model)
+
+# Perform backward elimination
+cat("\nPerforming Backward Elimination...\n")
+backward_model <- step(full_model, 
+                       direction = "backward", 
+                       trace = 1)  # Set trace = 0 to suppress output
+
+cat("\nFinal Backward Elimination Model:\n")
+summary(backward_model)
+
+
 ```{r}
 library(MASS)
 
@@ -81,7 +104,46 @@ summary(model_bic)
 null_model = lm(redshift ~ 1, data = df)
 null_model_aic = step(null_model, direction = "both", scope = list(upper = full_model), trace = FALSE)
 summary(null_model_aic)
-```
+
+
+cat("\nAIC and BIC Comparison:\n")
+
+# Initial model (all predictors)
+initial_model <- lm(redshift ~ ., data = df)
+cat("\nInitial Model AIC:", AIC(initial_model), "\n")
+cat("Initial Model BIC:", BIC(initial_model), "\n")
+cat("R Squared for Initial Model: ", summary(initial_model)$r.squared, "\n")
+
+# Interaction model (with interaction terms)
+interaction_model <- lm(redshift ~ .^2, data = df)
+cat("\nInteraction Model AIC:", AIC(interaction_model), "\n")
+cat("Interaction Model BIC:", BIC(interaction_model), "\n")
+cat("R Squared for Interaction Model: ", summary(interaction_model)$r.squared, "\n")
+
+# Forward selection model
+cat("\nForward Selection Model AIC:", AIC(forward_model), "\n")
+cat("Forward Selection Model BIC:", BIC(forward_model), "\n")
+
+# Backward elimination model
+cat("\nBackward Elimination Model AIC:", AIC(backward_model), "\n")
+cat("Backward Elimination Model BIC:", BIC(backward_model), "\n")
+
+# Compare AIC and BIC to pick the best model based on lowest values
+model_comparison <- data.frame(
+  Model = c("Initial", "Interaction", "Forward Selection", "Backward Elimination"),
+  AIC = c(AIC(initial_model), AIC(interaction_model), AIC(forward_model), AIC(backward_model)),
+  BIC = c(BIC(initial_model), BIC(interaction_model), BIC(forward_model), BIC(backward_model))
+)
+
+
+print(model_comparison)
+
+
+
+
+
+
+
 
 ```{r}
 # Compare AIC of each model
@@ -113,12 +175,17 @@ cat("\nThe best model is: ", model_names[best_model_index])
 
 ## Results
 
-AIC for Initial Model:  81186.36 
-AIC for Interaction Model:  75952.31 
-AIC for Final Model (After Stepwise Selection):  75949.73 
-The best model is: Final Model (Stepwise)
+                Model         AIC         BIC
+1              Initial   -438.3181   -305.1372
+2          Interaction -15619.1862 -14867.6650
+3    Forward Selection   -444.6765   -349.5473
+4 Backward Elimination   -444.6765   -349.5473
+ 
 
-AIC measures model quality, balancing fit and model complexity. Lower AIC values indicate a better model because it achieves a better fit with fewer predictors or unnecessary complexity. The Final Model has the lowest AIC of the three models, indicating that it fits the data well. It excludes predictors or interactions that do not contribute significantly to the model.
+
+
+AIC measures model quality, balancing fit and model complexity. Lower AIC values indicate a better model because it achieves a better fit with fewer predictors or unnecessary complexity. Interaction Model has the lowest AIC and BIC, the complexity introduced by the interactions might make it less desirable if generalization is a priority. The forward/backward elimination models strike a balance between complexity and fit, and they have slightly better AIC and BIC than the initial model, without the additional complexity of interaction terms
+
 
 ## Discussion
 
