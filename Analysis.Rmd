@@ -133,10 +133,10 @@ cat("\nThe best model is: ", model_names[best_model_index])
 ## Results
 
                 Model         AIC         BIC
-1              Initial   -438.3181   -305.1372
-2          Interaction -15619.1862 -14867.6650
-3    Forward Selection   -444.6765   -349.5473
-4 Backward Elimination   -444.6765   -349.5473
+1              Initial       -438        -305
+2          Interaction     -15619       14867
+3    Forward Selection     -15632      -15014
+4 Backward Elimination     -15577      -15168
  
 
 
