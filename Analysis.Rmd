@@ -81,12 +81,19 @@ logn = log(length(resid(interaction_model)))
 model_bic = step(interaction_model, direction = "both", k = logn, trace = FALSE)
 summary(model_bic)
 
-null_model = lm(redshift ~ 1, data = df)
-null_model_aic = step(null_model, direction = "both", scope = list(upper = full_model), trace = FALSE)
-summary(null_model_aic)
+null_model <- lm(redshift ~ 1, data = df)
+full_model <- lm(redshift ~ .^2, data = df)
 
+forward_model_aic <- step(null_model, direction = "forward", scope = formula(full_model), trace = FALSE)
 
-cat("\nAIC and BIC Comparison:\n")
+summary(forward_model_aic)
+
+logn <- log(nrow(df))  # Adjust the penalty for BIC
+forward_model_bic <- step(null_model, direction = "forward", scope = formula(full_model), k = logn, trace = FALSE)
+
+summary(forward_model_bic)
+
+```
 
 ```{r}
 # Compare AIC of each model
@@ -105,6 +112,13 @@ cat("R Squared for AIC Stepwise Model: ", summary(final_model_aic)$r.squared, "\
 cat("\nAIC for BIC selected model: ", AIC(model_bic), "\n")
 cat("BIC for BIC selected model: ", BIC(model_bic), "\n")
 cat("R Squared for AIC Stepwise Model: ", summary(model_bic)$r.squared)
+
+cat("\nModel Comparison Metrics:\n")
+cat("Forward Model (AIC) - AIC: ", AIC(forward_model_aic), ", BIC: ", BIC(forward_model_aic), 
+    ", Adjusted R-Squared: ", summary(forward_model_aic)$adj.r.squared, "\n")
+
+cat("Forward Model (BIC) - AIC: ", AIC(forward_model_bic), ", BIC: ", BIC(forward_model_bic), 
+    ", Adjusted R-Squared: ", summary(forward_model_bic)$adj.r.squared, "\n")
 ```
 
 ```{r}
@@ -132,8 +146,9 @@ AIC measures model quality, balancing fit and model complexity. Lower AIC values
 
 ## Discussion
 
-The final model captures the relationships between the photometric properties (u, g, r, i, z) and petrosian radii (petroRad_u, petroRad_g, petroRad_r, petroRad_i, petroRad_z) 
-of celestial objects and their redshift. The redshift of a celestial object is a critical measurement in astrophysics, reflecting the degree to which the object's light has shifted toward longer wavelengths. Our model provides a way to predict redshift using data and available features from the Sloan Digital Sky Survey (SDSS). The final model provides an efficient method for predicting redshift based on photometric and structural data. This can be valuable in astrophysical studies because it allows researchers to quickly estimate redshift without relying on time-intensive spectroscopic observations.
+The final model captures the relationships between the photometric properties (u, g, r, i, z) and petrosian radii (petroRad_u, petroRad_g, petroRad_r, petroRad_i, petroRad_z) of celestial objects and their redshift. The redshift of a celestial object is a critical measurement in astrophysics, reflecting the degree to which the object's light has shifted toward longer wavelengths. Our model provides a way to predict redshift using data and available features from the Sloan Digital Sky Survey (SDSS). The final model provides an efficient method for predicting redshift based on photometric and structural data. This can be valuable in astrophysical studies because it allows researchers to quickly estimate redshift without relying on time-intensive spectroscopic observations.
+
+The stepwise selection methods of AIC and BIC allowed us to keep much of the predictive accuracy of the interaction model while also reducing the number of predictors. The AIC-based model performed slightly better in terms of both fit and adjusted R-squared compared to the BIC-based model, but it was also more complex in terms of the number of predictors. The BIC-based model, with only 20 predictors was also able to offer near similar accuracy but when dealing with complex systems like astronomical objects slightly more accuracy is crucial when interpreting data and is why the AIC stepwise model would provide the best combination of accuracy and simplicity and make it the most ideal choice for predicting redshift based on the SDSS dataset.
 
 
 ## Appendix
